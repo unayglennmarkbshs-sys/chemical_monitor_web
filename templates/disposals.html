@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Disposal Requests - Chemical Monitor{% endblock %}
+{% block content %}
+<h2 class="page-title">Disposal Requests</h2>
+<p class="subtitle">Requests are documented and approved by authorized personnel. The system does not perform physical disposal.</p>
+<div class="toolbar">
+  {% if has_permission('request') %}
+    <a class="btn" href="{{ url_for('add_disposal') }}">New request</a>
+  {% endif %}
+  {% if has_permission('update_status') %}
+    <span class="muted">Click a request below to review or approve it.</span>
+  {% endif %}
+</div>
+<div class="table-wrap">
+  <table>
+    <tr><th>ID</th><th>Chemical</th><th>Reason</th><th>Requested by</th><th>Date</th><th>Status</th><th>Approved by</th>{% if has_permission('update_status') %}<th>Action</th>{% endif %}</tr>
+    {% for item in items %}
+    <tr>
+      <td>{{ item.id }}</td>
+      <td>{{ item.chemical_name }}</td>
+      <td>{{ item.reason }}</td>
+      <td>{{ item.requested_by }}</td>
+      <td>{{ item.request_date }}</td>
+      <td><span class="status status-{{ item.status|lower }}">{{ item.status }}</span></td>
+      <td>{{ item.approved_by or '-' }}</td>
+      {% if has_permission('update_status') %}
+      <td><a class="btn" href="{{ url_for('update_disposal', request_id=item.id) }}">Review</a></td>
+      {% endif %}
+    </tr>
+    {% else %}
+    <tr><td colspan="8" class="muted">No disposal requests yet.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

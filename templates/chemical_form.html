@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if item else 'Add' }} Chemical - Chemical Monitor{% endblock %}
+{% block content %}
+<h2 class="page-title">{{ 'Edit Chemical Record' if item else 'Add Chemical Record' }}</h2>
+<p class="subtitle">Use the date format YYYY-MM-DD for the expiry date.</p>
+<div class="panel">
+  <form method="post">
+    <div class="form-grid">
+      <div class="full"><label>Chemical name *</label><input type="text" name="chemical_name" value="{{ item['chemical_name'] if item else '' }}" required></div>
+      <div><label>Quantity</label><input type="number" step="0.01" name="quantity" value="{{ item['quantity'] if item else '' }}"></div>
+      <div><label>Unit</label><input type="text" name="unit" value="{{ item['unit'] if item else 'units' }}"></div>
+      <div><label>Hazard category</label><input type="text" name="hazard_category" value="{{ item['hazard_category'] if item else 'General' }}"></div>
+      <div><label>Supplier</label><input type="text" name="supplier" value="{{ item['supplier'] if item else '' }}"></div>
+      <div><label>Batch number</label><input type="text" name="batch_number" value="{{ item['batch_number'] if item else '' }}"></div>
+      <div><label>Expiry date (YYYY-MM-DD) *</label><input type="date" name="expiry_date" value="{{ item['expiry_date'] if item else '' }}" required></div>
+      <div><label>Room</label><input type="text" name="room" value="{{ item['room'] if item else '' }}"></div>
+      <div><label>Cabinet</label><input type="text" name="cabinet" value="{{ item['cabinet'] if item else '' }}"></div>
+      <div><label>Shelf</label><input type="text" name="shelf" value="{{ item['shelf'] if item else '' }}"></div>
+      <div class="full"><label>Safety notes</label><textarea name="safety_notes" rows="3">{{ item['safety_notes'] if item else '' }}</textarea></div>
+    </div>
+    <div class="actions">
+      <button type="submit">Save record</button>
+      <a class="btn btn-danger" href="{{ url_for('chemicals') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

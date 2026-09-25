@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Chemical Monitor{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  {% block header %}
+  <header>
+    <h1>School Laboratory Chemical Monitor</h1>
+    <div class="userbox">
+      <span>{{ current_user().username }}</span>
+      <span class="role-badge" style="background: {{ role_colors.get(current_user().role, '#52606d') }}">{{ current_user().role }}</span>
+      <a class="btn btn-outline" href="{{ url_for('logout') }}">Logout</a>
+    </div>
+  </header>
+  <nav class="tabs">
+    <a class="{{ 'active' if request.endpoint == 'dashboard' }}" href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a class="{{ 'active' if request.endpoint in ('chemicals','add_chemical','edit_chemical') }}" href="{{ url_for('chemicals') }}">Chemical Records</a>
+    <a class="{{ 'active' if request.endpoint in ('disposals','add_disposal','update_disposal') }}" href="{{ url_for('disposals') }}">Disposal Requests</a>
+    <a class="{{ 'active' if request.endpoint in ('reports','download_report') }}" href="{{ url_for('reports') }}">Reports</a>
+    {% if has_permission('view_audit') %}
+    <a class="{{ 'active' if request.endpoint == 'audit' }}" href="{{ url_for('audit') }}">Audit Trail</a>
+    {% endif %}
+  </nav>
+  {% endblock %}
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer>School Laboratory Chemical Expiry and Disposal Monitoring System</footer>
+</body>
+</html>

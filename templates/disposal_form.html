@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Review' if item else 'New' }} Disposal Request - Chemical Monitor{% endblock %}
+{% block content %}
+<h2 class="page-title">{{ 'Review Disposal Request' if item else 'New Disposal Request' }}</h2>
+<p class="subtitle">{{ 'Update the status and approval details.' if item else 'Document an expired or unwanted chemical for authorized disposal review.' }}</p>
+<div class="panel">
+  <form method="post">
+    <div class="form-grid">
+      {% if item %}
+        <div class="full"><label>Chemical</label><input type="text" value="{{ item.chemical_name }} (expires {{ item.expiry_date }})" disabled></div>
+      {% else %}
+        <div class="full"><label>Chemical *</label>
+          <select name="chemical_id" required>
+            {% for c in chemicals %}
+            <option value="{{ c.id }}">{{ c.chemical_name }} (expires {{ c.expiry_date }})</option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+      {% if item %}
+        <div class="full"><label>Reason</label><input type="text" value="{{ item.reason }}" disabled></div>
+        <div><label>Requested by</label><input type="text" value="{{ item.requested_by }}" disabled></div>
+        <div><label>Request date</label><input type="text" value="{{ item.request_date }}" disabled></div>
+      {% else %}
+        <div class="full"><label>Reason *</label><input type="text" name="reason" placeholder="Expired chemical requiring authorized disposal review" required></div>
+        <div><label>Requested by *</label><input type="text" name="requested_by" value="{{ current_user().role }}" required></div>
+        <div><label>Request date *</label><input type="date" name="request_date" required></div>
+      {% endif %}
+      <div><label>Status</label>
+        <select name="status">
+          {% for s in ['Pending','Approved','Completed','Rejected'] %}
+          <option value="{{ s }}" {{ 'selected' if item and item.status == s }}>{{ s }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div><label>Approved by (required for Approved/Completed)</label><input type="text" name="approved_by" value="{{ item.approved_by if item else '' }}"></div>
+      <div><label>Completed date (YYYY-MM-DD)</label><input type="date" name="completed_date" value="{{ item.completed_date if item else '' }}"></div>
+      <div class="full"><label>Notes</label><textarea name="notes" rows="3">{{ item.notes if item else '' }}</textarea></div>
+    </div>
+    <div class="actions">
+      <button type="submit">Save request</button>
+      <a class="btn btn-danger" href="{{ url_for('disposals') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

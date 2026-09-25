@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Reports - Chemical Monitor{% endblock %}
+{% block content %}
+<h2 class="page-title">Reports and Export</h2>
+<p class="subtitle">Download CSV reports for Excel or Google Sheets.</p>
+<div class="panel">
+  <h3>Download reports (CSV)</h3>
+  <div class="actions">
+    <a class="btn" href="{{ url_for('download_report', report_type='inventory') }}">Chemical inventory</a>
+    <a class="btn" href="{{ url_for('download_report', report_type='expiry') }}">Expiry monitoring report</a>
+    <a class="btn" href="{{ url_for('download_report', report_type='disposals') }}">Disposal request report</a>
+  </div>
+</div>
+<div class="panel">
+  <h3>Expiry overview</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Name</th><th>Quantity</th><th>Expiry date</th><th>Status</th></tr>
+      {% for item in expiry %}
+      <tr>
+        <td>{{ item.chemical_name }}</td>
+        <td>{{ item.quantity }} {{ item.unit }}</td>
+        <td>{{ item.expiry_date }}</td>
+        <td><span class="status status-{{ 'expired' if item.status == 'Expired' else 'soon' if item.status == 'Expiring soon' else 'valid' }}">{{ item.status }}</span></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+<div class="panel">
+  <h3>Disposal requests</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Chemical</th><th>Reason</th><th>Date</th><th>Status</th><th>Approved by</th></tr>
+      {% for item in disposals %}
+      <tr>
+        <td>{{ item.chemical_name }}</td>
+        <td>{{ item.reason }}</td>
+        <td>{{ item.request_date }}</td>
+        <td><span class="status status-{{ item.status|lower }}">{{ item.status }}</span></td>
+        <td>{{ item.approved_by or '-' }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}

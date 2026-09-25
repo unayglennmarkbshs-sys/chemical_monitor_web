@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Audit Trail - Chemical Monitor{% endblock %}
+{% block content %}
+<h2 class="page-title">Audit Trail</h2>
+<p class="subtitle">Recorded actions with user, role, and timestamp.</p>
+<div class="table-wrap">
+  <table>
+    <tr><th>Timestamp</th><th>User</th><th>Role</th><th>Action</th><th>Details</th></tr>
+    {% for entry in entries %}
+    <tr>
+      <td>{{ entry.timestamp }}</td>
+      <td>{{ entry.user }}</td>
+      <td>{{ entry.role }}</td>
+      <td>{{ entry.action }}</td>
+      <td>{{ entry.details }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" class="muted">No audit entries yet.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

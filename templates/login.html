@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Chemical Monitor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-card">
+      <h1>School Laboratory Chemical Monitor</h1>
+      <p class="hint">Expiry and disposal monitoring system. Please log in.</p>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endwith %}
+      <form method="post">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required autofocus>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Log in</button>
+      </form>
+      <p class="accounts">
+        Demo accounts:<br>
+        admin / admin123 (full access)<br>
+        staff / lab123 (requests only)<br>
+        dept / dept123 (approvals)<br>
+        custodian / lab123 (records)
+      </p>
+    </div>
+  </div>
+</body>
+</html>

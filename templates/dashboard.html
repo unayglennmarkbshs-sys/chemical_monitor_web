@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Chemical Monitor{% endblock %}
+{% block content %}
+<h2 class="page-title">Dashboard</h2>
+<p class="subtitle">Monitor the current status of laboratory chemical records.</p>
+<div class="cards">
+  <div class="card"><div class="label">Total chemicals</div><div class="value blue">{{ stats.total }}</div></div>
+  <div class="card"><div class="label">Expired</div><div class="value red">{{ stats.expired }}</div></div>
+  <div class="card"><div class="label">Expiring within 30 days</div><div class="value orange">{{ stats.soon }}</div></div>
+  <div class="card"><div class="label">Pending disposal requests</div><div class="value purple">{{ stats.pending }}</div></div>
+</div>
+<div class="panel">
+  <h3>Quick actions</h3>
+  <div class="actions">
+    {% if has_permission('add') %}
+      <a class="btn" href="{{ url_for('add_chemical') }}">Add chemical record</a>
+    {% endif %}
+    {% if has_permission('request') %}
+      <a class="btn" href="{{ url_for('add_disposal') }}">Create disposal request</a>
+    {% endif %}
+    <form method="post" action="{{ url_for('load_demo') }}" class="inline-form">
+      <button type="submit">Load demo data</button>
+    </form>
+    <a class="btn" href="{{ url_for('chemicals') }}">View chemical records</a>
+  </div>
+</div>
+<div class="panel">
+  <h3>System purpose</h3>
+  <p class="muted">This system records chemical details, expiry dates, storage locations, and disposal requests. It does not perform physical chemical handling or disposal. It supports laboratory personnel by keeping records organized and producing monitoring reports.</p>
+</div>
+{% endblock %}
